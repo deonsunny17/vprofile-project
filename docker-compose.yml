@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  dsprodb:
+    build:
+      context: ./Docker-files/db
+    image: deonsunny/dprofiledb
+    container_name: dsprodb
+    ports:
+      - "3306:3306"
+    # volumes:
+    #   - dsdbdata:/var/lib/mysql
+    # environment:
+    #   - MYSQL_ROOT_PASSWORD=
+
+  dsprocache01:
+    image: memcached
+    ports:
+      - "1121:1121"
+  
+  dspromq01:
+    image: rabbitmq
+    ports:
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+  
+  dsproapp:
+    build:
+      context: ./Docker-files/app
+    image: deonsunny/dprofileapp
+    container_name: dsproapp
+    ports:
+      - "8080:8080"
+
+  dsproweb:
+    build:
+      context: ./Docker-files/web
+    image: deonsunny/dprofileweb
+    container_name: dsproweb
+    ports:
+      - "80:80"
+  
+
+  
